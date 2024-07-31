@@ -1,0 +1,65 @@
+import os
+
+# Datei, in der die Notizen gespeichert werden
+NOTIZDATEI = "notizen.txt"
+
+def notiz_hinzufuegen():
+    notiz = input("Gib deine Notiz ein: ")
+    with open(NOTIZDATEI, 'a') as datei:
+        datei.write(notiz + "\n")
+    print("Notiz hinzugefügt!")
+
+def notizen_anzeigen():
+    if not os.path.exists(NOTIZDATEI):
+        print("Keine Notizen gefunden.")
+        return
+
+    with open(NOTIZDATEI, 'r') as datei:
+        notizen = datei.readlines()
+
+    if not notizen:
+        print("Keine Notizen gefunden.")
+    else:
+        print("Deine Notizen:")
+        for idx, notiz in enumerate(notizen, start=1):
+            print(f"{idx}. {notiz.strip()}")
+
+def notiz_loeschen():
+    notizen_anzeigen()
+    notiz_nummer = int(input("Gib die Nummer der zu löschenden Notiz ein: "))
+
+    with open(NOTIZDATEI, 'r') as datei:
+        notizen = datei.readlines()
+
+    if 0 < notiz_nummer <= len(notizen):
+        del notizen[notiz_nummer - 1]
+        with open(NOTIZDATEI, 'w') as datei:
+            datei.writelines(notizen)
+        print("Notiz gelöscht!")
+    else:
+        print("Ungültige Notiznummer.")
+
+def main():
+    while True:
+        print("\nEinfaches Notizbuch")
+        print("1. Notiz hinzufügen")
+        print("2. Notizen anzeigen")
+        print("3. Notiz löschen")
+        print("4. Beenden")
+
+        wahl = input("Wähle eine Option: ")
+
+        if wahl == "1":
+            notiz_hinzufuegen()
+        elif wahl == "2":
+            notizen_anzeigen()
+        elif wahl == "3":
+            notiz_loeschen()
+        elif wahl == "4":
+            print("Programm beendet.")
+            break
+        else:
+            print("Ungültige Auswahl. Bitte versuche es erneut.")
+
+if __name__ == "__main__":
+    main()
